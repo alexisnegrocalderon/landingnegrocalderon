@@ -1,30 +1,8 @@
 'use client'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { useMagneticEffect } from '@/hooks/useMagneticEffect'
 import SkyAtmosphere from './SkyAtmosphere'
-
-function Counter({ from = 0, to, suffix = '' }: { from?: number; to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true })
-  const [count, setCount] = useState(from)
-
-  useEffect(() => {
-    if (!inView) return
-    let start: number | null = null
-    const duration = 2000
-    const step = (ts: number) => {
-      if (!start) start = ts
-      const progress = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.floor(from + (to - from) * eased))
-      if (progress < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }, [inView, from, to])
-
-  return <span ref={ref}>{count}{suffix}</span>
-}
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -47,7 +25,6 @@ const fadeUp = {
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const { ref: primaryRef, x: px, y: py } = useMagneticEffect(0.4)
-  const { ref: secondaryRef, x: sx, y: sy } = useMagneticEffect(0.3)
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const altDisplay = useTransform(scrollYProgress, [0, 1], [35000, 0])
@@ -84,12 +61,12 @@ export default function Hero() {
         style={{ writingMode: 'vertical-rl', transform: 'translateY(-50%) rotate(180deg)' }}
       >
         <span className="font-sans text-[9px] tracking-[0.38em] uppercase text-cream/[0.18]">
-          WOW FX · DISEÑO · IA · MOVIMIENTO
+          NEGRO CALDERÓN · DISEÑADOR · CHILE
         </span>
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col flex-1 px-6 md:px-16 lg:px-24 pt-28 pb-12">
+      <div className="relative z-10 flex flex-col flex-1 px-6 md:px-16 lg:px-24 pt-28 pb-16">
 
         {/* Eyebrow */}
         <motion.div
@@ -101,7 +78,7 @@ export default function Hero() {
         >
           <span className="w-6 h-px bg-accent flex-shrink-0" />
           <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-cream/35">
-            Creative Studio · Chile → El Mundo
+            Diseñador · Chile
           </span>
         </motion.div>
 
@@ -114,7 +91,7 @@ export default function Hero() {
         >
           <h1
             className="font-serif italic font-light leading-[0.82] tracking-[-0.03em] text-cream select-none"
-            style={{ fontSize: 'clamp(76px, 14vw, 200px)' }}
+            style={{ fontSize: 'clamp(100px, 20vw, 320px)' }}
           >
             NEGRO
           </h1>
@@ -129,7 +106,7 @@ export default function Hero() {
         >
           <h1
             className="font-serif italic font-light leading-[0.82] tracking-[-0.03em] select-none"
-            style={{ fontSize: 'clamp(76px, 14vw, 200px)' }}
+            style={{ fontSize: 'clamp(100px, 20vw, 320px)' }}
           >
             <span className="text-cream">C</span>
             <span className="text-accent">AI</span>
@@ -137,74 +114,38 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* Subtitle + CTAs */}
+        {/* Subtitle + CTA */}
         <motion.div
           variants={fadeUp}
           custom={2.5}
           initial="hidden"
           animate="visible"
-          className="mt-10 md:mt-14 flex flex-col md:flex-row md:items-end justify-between gap-8"
+          className="mt-12 md:mt-16 flex flex-col md:flex-row md:items-end justify-between gap-8"
         >
           <p className="font-sans text-sm md:text-base text-cream/40 max-w-xs leading-relaxed">
-            Experiencias digitales que generan<br className="hidden md:block" />
-            conversaciones, no solo clics.
+            He recorrido 20 países para entender qué mueve a las personas.<br className="hidden md:block" />
+            Eso lo traduzco en diseño.
           </p>
 
-          <div className="flex flex-wrap gap-3 items-center">
-            <motion.a
-              ref={primaryRef as React.RefObject<HTMLAnchorElement>}
-              href="#servicios"
-              data-cursor="hover"
-              style={{ x: px, y: py }}
-              className="group relative inline-flex items-center gap-2 bg-accent text-cream font-sans text-xs font-medium tracking-[0.1em] uppercase px-7 py-3.5 overflow-hidden"
-            >
-              <span className="relative z-10">Cotizar ahora</span>
-              <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
-              <motion.span
-                className="absolute inset-0 bg-accent-light"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: '0%' }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              />
-            </motion.a>
-            <motion.a
-              ref={secondaryRef as React.RefObject<HTMLAnchorElement>}
-              href="#portafolio"
-              data-cursor="hover"
-              style={{ x: sx, y: sy }}
-              className="inline-flex items-center gap-2 border border-cream/15 text-cream/50 hover:text-cream hover:border-cream/30 font-sans text-xs tracking-[0.1em] uppercase px-7 py-3.5 transition-colors duration-300"
-            >
-              Ver trabajo
-            </motion.a>
-          </div>
+          <motion.a
+            ref={primaryRef as React.RefObject<HTMLAnchorElement>}
+            href="#servicios"
+            data-cursor="hover"
+            style={{ x: px, y: py }}
+            className="group relative inline-flex items-center gap-2 bg-accent text-cream font-sans text-xs font-medium tracking-[0.1em] uppercase px-7 py-3.5 overflow-hidden self-start"
+          >
+            <span className="relative z-10">Cotizar ahora</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <motion.span
+              className="absolute inset-0 bg-accent-light"
+              initial={{ x: '-100%' }}
+              whileHover={{ x: '0%' }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </motion.a>
         </motion.div>
 
       </div>
-
-      {/* Stats bar */}
-      <motion.div
-        variants={fadeUp}
-        custom={2.9}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 border-t border-cream/[0.06] px-6 md:px-16 lg:px-24 py-5 flex flex-wrap gap-8 md:gap-16 items-center"
-      >
-        {[
-          { val: 'SCL → CPH', label: 'Ruta' },
-          { val: null, label: 'Países', counter: { to: 20, suffix: '+' } },
-          { val: null, label: 'Proyectos', counter: { to: 200, suffix: '+' } },
-          { val: 'Brand Ensuring™', label: 'Metodología' },
-        ].map(({ val, label, counter }) => (
-          <div key={label}>
-            <div className="font-serif text-lg text-cream font-light">
-              {counter ? <Counter to={counter.to} suffix={counter.suffix} /> : val}
-            </div>
-            <div className="font-sans text-[9px] tracking-[0.2em] uppercase text-cream/25 mt-0.5">
-              {label}
-            </div>
-          </div>
-        ))}
-      </motion.div>
     </section>
   )
 }

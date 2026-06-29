@@ -14,7 +14,7 @@ export default function Philosophy() {
           transition={{ duration: 0.8, ease: EASE }}
           className="font-sans text-[10px] tracking-[0.3em] uppercase text-accent/60 mb-14"
         >
-          05 — Filosofía
+          03 — Filosofía
         </motion.p>
 
         <motion.div
@@ -72,7 +72,18 @@ export default function Philosophy() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 1.0, duration: 1.0, ease: EASE }}
-          className="font-sans text-[8px] tracking-[0.25em] text-cream/[0.12] mt-10"
+          className="font-sans text-xs text-cream/25 max-w-sm mt-10 leading-relaxed"
+        >
+          He vivido en 3 continentes, trabajado con marcas de 8 países,
+          y aprendido que el buen diseño no tiene idioma.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1.1, duration: 1.0, ease: EASE }}
+          className="font-sans text-[8px] tracking-[0.25em] text-cream/[0.10] mt-4"
         >
           33°27&#39;S 70°40&#39;W · 55°40&#39;N 12°34&#39;E · 35°41&#39;N 139°41&#39;E
         </motion.p>
