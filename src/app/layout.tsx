@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant, Archivo } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const cormorant = Cormorant({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );
