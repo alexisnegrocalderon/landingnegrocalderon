@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${cormorant.variable} ${archivo.variable} font-sans bg-cream text-dark overflow-x-hidden antialiased`}>
+      <body className={`${cormorant.variable} ${archivo.variable} font-sans bg-dark text-cream overflow-x-hidden antialiased`}>
         <Providers>
           {children}
         </Providers>

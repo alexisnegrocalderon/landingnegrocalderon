@@ -1,36 +1,21 @@
 'use client'
 
-const ITEMS = [
-  'SITIOS WEB',
-  'WOW FX',
-  'PRESENCIA DIGITAL',
-  'DISEÑO CON ALMA',
-  'MARCAS QUE VENDEN',
-  'IA & AUTOMATIZACIÓN',
-]
-
+const ITEMS = ['Identidad', 'Velocidad', 'Impacto', 'Diseño', 'Movimiento', 'IA', 'WOW FX', 'Presencia']
 const tripled = [...ITEMS, ...ITEMS, ...ITEMS]
 
 export default function Marquee() {
   return (
-    <div className="overflow-hidden py-5 border-y border-dark/8 bg-dark">
+    <div className="overflow-hidden py-4 border-y border-cream/[0.06] bg-surface">
       <div
-        className="flex gap-10 whitespace-nowrap"
-        style={{ animation: 'marquee 35s linear infinite' }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.animationPlayState = 'paused'
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.animationPlayState = 'running'
-        }}
+        className="flex gap-8 whitespace-nowrap"
+        style={{ animation: 'marquee 40s linear infinite' }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.animationPlayState = 'paused' }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.animationPlayState = 'running' }}
       >
         {tripled.map((item, i) => (
-          <span
-            key={i}
-            className="font-serif italic text-cream text-3xl md:text-4xl shrink-0 select-none"
-          >
+          <span key={i} className="font-serif italic text-cream/50 text-2xl md:text-3xl shrink-0 select-none">
             {item}
-            <span className="text-red mx-5 not-italic">·</span>
+            <span className="text-accent mx-5 not-italic font-sans text-base align-middle">◆</span>
           </span>
         ))}
       </div>
