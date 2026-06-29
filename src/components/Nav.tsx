@@ -46,14 +46,14 @@ export default function Nav() {
       </a>
 
       <div className="hidden md:flex items-center gap-8">
-        {['Servicios', 'Trabajo', 'Proceso'].map((link) => (
+        {[['Servicios', 'servicios'], ['Filosofía', 'filosofia'], ['Contacto', 'contacto']].map(([label, hash]) => (
           <a
-            key={link}
-            href={`#${link.toLowerCase()}`}
+            key={hash}
+            href={`#${hash}`}
             data-cursor="hover"
             className="font-sans text-xs tracking-[0.12em] uppercase text-cream/30 hover:text-cream/70 transition-colors duration-300"
           >
-            {link}
+            {label}
           </a>
         ))}
       </div>

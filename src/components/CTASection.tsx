@@ -15,7 +15,7 @@ export default function CTASection() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="font-sans text-[10px] tracking-[0.28em] uppercase text-accent/50 mb-6"
         >
-          07 — Contacto
+          04 — Contacto
         </motion.p>
 
         <motion.h2
