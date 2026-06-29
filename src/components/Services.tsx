@@ -9,82 +9,150 @@ type Service = {
   price: string
   amount: number | null
   desc: string
+  tag: string
+  featured?: boolean
 }
 
 const services: Service[] = [
-  { id: 'logo', title: 'Diseño de Logo', price: '$21.285', amount: 21285, desc: 'Identidad visual única, vectores y manual de marca básico.' },
-  { id: 'express', title: 'Sitio Web Express', price: '$58.500', amount: 58500, desc: 'Sitio rápido y optimizado. Listo en días, listo para vender.' },
-  { id: 'wow', title: 'Sitio "WOW Effect"', price: '$133.500', amount: 133500, desc: 'El sitio que hace que tus clientes se detengan y digan WOW.' },
-  { id: 'premium', title: 'Sitio Web Premium', price: '$210.000', amount: 210000, desc: 'Ecosistema digital completo. Tu marca a otro nivel.' },
-  { id: 'redes', title: 'Gestión de Redes Sociales', price: 'Consultar', amount: null, desc: 'Community manager estratégico para escalar tu comunidad.' },
-  { id: 'posts', title: 'Diseño de Posts / Carruseles', price: 'Consultar', amount: null, desc: 'Pack de contenido visual semanal con identidad de marca.' },
-  { id: 'videos', title: 'Videos Reels de Impacto', price: '$15.000/u', amount: 15000, desc: 'Reels editados para captar atención y convertir en segundos.' },
-  { id: 'ia', title: 'Agente con IA', price: 'Consultar', amount: null, desc: 'Automatización inteligente que trabaja por tu negocio 24/7.' },
+  { id: 'logo',    title: 'Diseño de Logo',             price: '$21.285',   amount: 21285,  tag: 'IDENTIDAD', desc: 'Identidad visual única, vectores y manual de marca básico.' },
+  { id: 'express', title: 'Sitio Web Express',           price: '$58.500',   amount: 58500,  tag: 'EXPRESS',   desc: 'Sitio rápido y optimizado. Listo en días, listo para vender.' },
+  { id: 'wow',     title: 'Sitio "WOW Effect"',          price: '$133.500',  amount: 133500, tag: 'DESTACADO', desc: 'El sitio que hace que tus clientes se detengan y digan WOW. Animaciones cinematográficas, diseño con alma, presencia que se recuerda.', featured: true },
+  { id: 'premium', title: 'Sitio Web Premium',           price: '$210.000',  amount: 210000, tag: 'PREMIUM',   desc: 'Ecosistema digital completo. Tu marca a otro nivel.' },
+  { id: 'redes',   title: 'Gestión de Redes Sociales',   price: 'Consultar', amount: null,   tag: 'SOCIAL',    desc: 'Community manager estratégico para escalar tu comunidad.' },
+  { id: 'posts',   title: 'Diseño de Posts',             price: 'Consultar', amount: null,   tag: 'CONTENIDO', desc: 'Pack de contenido visual semanal con identidad de marca.' },
+  { id: 'videos',  title: 'Videos Reels',                price: '$15.000/u', amount: 15000,  tag: 'VIDEO',     desc: 'Reels editados para captar atención y convertir en segundos.' },
+  { id: 'ia',      title: 'Agente con IA',               price: 'Consultar', amount: null,   tag: 'IA',        desc: 'Automatización inteligente que trabaja por tu negocio 24/7.' },
 ]
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
-function ServiceRow({ service, selected, onToggle, index }: {
+function WindowCard({ service, selected, onToggle, index }: {
   service: Service; selected: boolean; onToggle: () => void; index: number
 }) {
-  const [hovered, setHovered] = useState(false)
+  const isFeatured = service.featured
 
   return (
     <motion.div
       onClick={onToggle}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
       data-cursor="hover"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.6, ease: EASE, delay: index * 0.06 }}
-      className={`group flex items-center gap-5 md:gap-8 py-6 border-b cursor-none transition-colors duration-300 ${
-        selected ? 'border-accent/30' : 'border-cream/[0.07]'
-      }`}
+      transition={{ duration: 0.7, ease: EASE, delay: index * 0.08 }}
+      className={`relative cursor-none ${isFeatured ? 'md:col-span-2' : ''}`}
     >
-      {/* Index */}
-      <span className={`font-sans text-[9px] tracking-[0.2em] w-5 flex-shrink-0 transition-colors duration-300 ${
-        selected ? 'text-accent' : 'text-cream/18'
-      }`}>
-        {String(index + 1).padStart(2, '0')}
-      </span>
+      {/* Window outer frame — aluminum surround */}
+      <div
+        className={`relative p-[3px] transition-all duration-500 ${
+          isFeatured ? 'rounded-[28px]' : 'rounded-[24px]'
+        } ${
+          selected
+            ? 'bg-gradient-to-br from-accent/60 via-accent/30 to-accent/10'
+            : isFeatured
+              ? 'bg-gradient-to-br from-amber-400/25 via-orange-300/10 to-transparent'
+              : 'bg-gradient-to-br from-cream/12 via-cream/5 to-transparent'
+        }`}
+        style={
+          selected
+            ? { boxShadow: '0 0 40px rgba(192,57,43,0.20), 0 0 80px rgba(192,57,43,0.08)' }
+            : isFeatured
+              ? { boxShadow: '0 0 50px rgba(255,180,40,0.12), 0 0 100px rgba(255,140,20,0.06)' }
+              : {}
+        }
+      >
+        {/* Window inner glass */}
+        <div
+          className={`relative overflow-hidden transition-all duration-500 ${
+            isFeatured ? 'rounded-[26px]' : 'rounded-[22px]'
+          } ${
+            selected ? 'bg-[#1A0C0A]' : isFeatured ? 'bg-[#100C06]' : 'bg-[#0C0A08]'
+          }`}
+          style={{
+            padding: isFeatured ? '28px 32px' : '22px 24px',
+            minHeight: isFeatured ? '220px' : '180px',
+          }}
+        >
+          {/* Sky view through window — top area */}
+          <div
+            className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
+            style={{
+              background: selected
+                ? 'linear-gradient(180deg, rgba(192,57,43,0.08) 0%, transparent 100%)'
+                : isFeatured
+                  ? 'linear-gradient(180deg, rgba(255,160,40,0.07) 0%, transparent 100%)'
+                  : 'linear-gradient(180deg, rgba(4,14,32,0.60) 0%, transparent 100%)',
+            }}
+          />
 
-      {/* Name + hover description */}
-      <div className="flex-1 min-w-0">
-        <h3 className={`font-serif font-light leading-tight transition-colors duration-300 ${
-          selected ? 'text-cream' : 'text-cream/65 group-hover:text-cream/90'
-        }`} style={{ fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)' }}>
-          {service.title}
-        </h3>
-        <AnimatePresence>
-          {(hovered || selected) && (
-            <motion.p
-              key="desc"
-              initial={{ opacity: 0, height: 0, marginTop: 0 }}
-              animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
-              exit={{ opacity: 0, height: 0, marginTop: 0 }}
-              transition={{ duration: 0.22, ease: EASE }}
-              className="font-sans text-xs text-cream/28 leading-relaxed overflow-hidden"
-            >
-              {service.desc}
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </div>
+          {/* Inner window frame — double pane effect */}
+          <div
+            className={`absolute inset-3 rounded-[18px] border pointer-events-none ${
+              selected ? 'border-accent/15' : isFeatured ? 'border-amber-400/10' : 'border-cream/[0.04]'
+            }`}
+          />
 
-      {/* Price — large */}
-      <span className={`font-serif font-light flex-shrink-0 transition-colors duration-300 ${
-        selected ? 'text-accent' : 'text-cream/45 group-hover:text-cream/65'
-      }`} style={{ fontSize: 'clamp(1.3rem, 2.2vw, 2rem)' }}>
-        {service.price}
-      </span>
+          {/* Tag + featured badge */}
+          <div className="relative z-10 flex items-center justify-between mb-4">
+            <span className={`font-sans text-[8px] tracking-[0.3em] uppercase ${
+              selected ? 'text-accent' : isFeatured ? 'text-amber-400/70' : 'text-cream/20'
+            }`}>
+              {service.tag}
+            </span>
+            {isFeatured && (
+              <span className="font-sans text-[7px] tracking-[0.25em] uppercase bg-amber-400/15 border border-amber-400/30 text-amber-300/80 px-2 py-0.5 rounded-full">
+                ★ Recomendado
+              </span>
+            )}
+            {selected && !isFeatured && (
+              <span className="font-sans text-[7px] tracking-[0.2em] uppercase text-accent/60">● En vuelo</span>
+            )}
+          </div>
 
-      {/* Select indicator */}
-      <div className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center transition-all duration-300 ${
-        selected ? 'bg-accent border-accent' : 'border-cream/15 group-hover:border-cream/30'
-      }`}>
-        {selected && <span className="text-cream text-[8px] font-bold leading-none">✓</span>}
+          {/* Service name */}
+          <h3
+            className={`relative z-10 font-serif font-light leading-tight mb-2 transition-colors duration-300 ${
+              selected ? 'text-cream' : isFeatured ? 'text-cream/90' : 'text-cream/65'
+            }`}
+            style={{ fontSize: isFeatured ? 'clamp(1.3rem, 2.5vw, 1.8rem)' : 'clamp(1rem, 1.8vw, 1.3rem)' }}
+          >
+            {service.title}
+          </h3>
+
+          {/* Description */}
+          <p className={`relative z-10 font-sans leading-relaxed mb-5 ${
+            isFeatured ? 'text-sm text-cream/40' : 'text-xs text-cream/28'
+          }`}>
+            {service.desc}
+          </p>
+
+          {/* Bottom row: price + select */}
+          <div className="relative z-10 flex items-end justify-between gap-4 mt-auto">
+            <div>
+              <p className="font-sans text-[7px] tracking-[0.2em] uppercase text-cream/18 mb-1">PRECIO</p>
+              <p
+                className={`font-serif font-light leading-none transition-colors duration-300 ${
+                  selected ? 'text-accent' : isFeatured ? 'text-amber-300/80' : 'text-cream/55'
+                }`}
+                style={{ fontSize: isFeatured ? 'clamp(1.8rem, 3vw, 2.8rem)' : 'clamp(1.4rem, 2.2vw, 2rem)' }}
+              >
+                {service.price}
+              </p>
+            </div>
+
+            <div className={`flex items-center gap-2 border px-3 py-1.5 transition-all duration-300 ${
+              selected
+                ? 'border-accent/50 bg-accent/10 text-accent'
+                : isFeatured
+                  ? 'border-amber-400/25 text-amber-300/60 hover:border-amber-400/50'
+                  : 'border-cream/12 text-cream/30 hover:border-cream/25'
+            }`}>
+              {selected && <span className="text-accent text-[9px]">✓</span>}
+              <span className="font-sans text-[8px] tracking-[0.18em] uppercase">
+                {selected ? 'Añadido' : 'Añadir'}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   )
@@ -102,8 +170,28 @@ export default function Services() {
 
   return (
     <>
-      <section id="servicios" className="py-24 md:py-32 px-6 md:px-16 lg:px-24 bg-dark">
-        <div className="max-w-5xl mx-auto">
+      <section
+        id="servicios"
+        className="relative py-24 md:py-32 px-6 md:px-16 lg:px-24 overflow-hidden"
+        style={{ background: 'linear-gradient(180deg, #060402 0%, #0C0904 15%, #0A0803 100%)' }}
+      >
+        {/* Cabin overhead light effect */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 50% -5%, rgba(255,200,120,0.07) 0%, transparent 50%)',
+          }}
+        />
+
+        {/* Cabin ceiling strip — horizontal light band */}
+        <div
+          className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+          style={{
+            background: 'linear-gradient(90deg, transparent 5%, rgba(255,200,100,0.12) 30%, rgba(255,200,100,0.18) 50%, rgba(255,200,100,0.12) 70%, transparent 95%)',
+          }}
+        />
+
+        <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -115,14 +203,18 @@ export default function Services() {
               02 — Servicios
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4.5vw,3.5rem)] font-light leading-tight text-cream">
-              Qué necesitas.<br />
-              <em className="text-accent italic">Qué vale.</em>
+              Elige tus destinos.<br />
+              <em className="text-accent italic">Arma tu ruta.</em>
             </h2>
+            <p className="font-sans text-sm text-cream/30 max-w-xs mt-3 leading-relaxed">
+              Cada ventana es un servicio. Selecciona los que necesitas y forma tu itinerario.
+            </p>
           </motion.div>
 
-          <div className="border-t border-cream/[0.07]">
+          {/* Windows grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
             {services.map((s, i) => (
-              <ServiceRow
+              <WindowCard
                 key={s.id}
                 service={s}
                 selected={selected.includes(s.id)}
@@ -134,49 +226,95 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Sticky bar — thin horizontal */}
+      {/* Flight itinerary — sticky bar */}
       <AnimatePresence>
         {selected.length > 0 && (
           <motion.div
-            initial={{ y: 56, opacity: 0 }}
+            initial={{ y: '100%', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 56, opacity: 0 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-            className="fixed bottom-0 left-0 right-0 z-40 h-14 bg-surface border-t border-cream/[0.08] flex items-center gap-3 px-4 md:px-8"
-            style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+            exit={{ y: '100%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 32, stiffness: 360 }}
+            className="fixed bottom-0 left-0 right-0 z-40"
+            style={{
+              background: 'rgba(10,8,6,0.97)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderTop: '1px solid rgba(242,237,230,0.08)',
+            }}
           >
-            <div className="flex-1 flex items-center gap-2 overflow-x-auto no-scrollbar min-w-0">
+            {/* Header strip */}
+            <div className="px-4 md:px-8 pt-2.5 pb-0 flex items-center gap-3">
+              <span className="font-sans text-[7px] tracking-[0.35em] uppercase text-cream/25">
+                ✈ TU ITINERARIO
+              </span>
+              <div className="flex-1 h-px bg-cream/[0.05]" />
+              <span className="font-sans text-[7px] tracking-[0.2em] uppercase text-cream/20">
+                {selectedServices.length} {selectedServices.length === 1 ? 'escala' : 'escalas'}
+              </span>
+            </div>
+
+            {/* Escalas route */}
+            <div className="px-4 md:px-8 py-2.5 flex items-center gap-0 overflow-x-auto no-scrollbar">
+              {/* Origin */}
+              <div className="flex-shrink-0 text-center mr-2">
+                <p className="font-sans text-[8px] tracking-[0.2em] uppercase text-cream/30 leading-none">ORIGEN</p>
+                <p className="font-serif text-xs text-cream/50 leading-none mt-0.5">SCL</p>
+              </div>
+
               {selectedServices.map((s) => (
-                <span
-                  key={s.id}
-                  className="inline-flex items-center gap-1.5 border border-accent/25 text-cream/60 font-sans text-[9px] tracking-[0.12em] uppercase px-2.5 py-1 whitespace-nowrap flex-shrink-0"
-                >
-                  {s.title}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); toggle(s.id) }}
-                    className="text-cream/30 hover:text-cream leading-none ml-0.5"
-                  >
-                    ×
-                  </button>
-                </span>
+                <div key={s.id} className="flex items-center flex-shrink-0">
+                  {/* Connector */}
+                  <div className="flex items-center gap-0">
+                    <div className="w-4 h-px border-t border-dashed border-cream/15" />
+                    <span className="text-accent/50 font-sans text-[8px] mx-0.5">✈</span>
+                    <div className="w-4 h-px border-t border-dashed border-cream/15" />
+                  </div>
+                  {/* Stop card */}
+                  <div className="flex items-center gap-1 border border-cream/[0.10] px-2 py-1 relative group">
+                    <span className="font-sans text-[8px] tracking-[0.08em] uppercase text-cream/55 whitespace-nowrap">
+                      {s.title}
+                    </span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggle(s.id) }}
+                      className="text-cream/20 hover:text-cream/60 leading-none ml-1 transition-colors"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
               ))}
+
+              {/* Connector to destination */}
+              <div className="flex items-center flex-shrink-0">
+                <div className="w-4 h-px border-t border-dashed border-cream/15" />
+                <span className="text-accent/50 font-sans text-[8px] mx-0.5">◉</span>
+                <div className="w-4 h-px border-t border-dashed border-cream/15" />
+              </div>
+
+              {/* Destination */}
+              <div className="flex-shrink-0 text-center ml-1">
+                <p className="font-sans text-[8px] tracking-[0.2em] uppercase text-cream/30 leading-none">DESTINO</p>
+                <p className="font-serif text-xs text-cream/50 leading-none mt-0.5">TU MARCA</p>
+              </div>
+
+              {/* Spacer + total + CTA */}
+              <div className="flex-shrink-0 flex items-center gap-3 ml-4 pl-4 border-l border-cream/[0.08]">
+                <div>
+                  <p className="font-sans text-[7px] tracking-[0.15em] uppercase text-cream/25 leading-none mb-0.5">
+                    TOTAL
+                  </p>
+                  <p className="font-serif text-sm text-cream leading-none">
+                    {total > 0 ? `$${total.toLocaleString('es-CL')}` : 'Consultar'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="flex-shrink-0 bg-accent text-cream font-sans text-[9px] font-medium tracking-[0.12em] uppercase px-4 py-2 hover:bg-accent-light transition-colors duration-300 whitespace-nowrap"
+                >
+                  Realizar este vuelo →
+                </button>
+              </div>
             </div>
-
-            <div className="w-px h-6 bg-cream/[0.08] flex-shrink-0" />
-
-            <div className="flex-shrink-0 text-right">
-              <p className="font-sans text-[8px] tracking-[0.15em] uppercase text-cream/25 leading-none mb-0.5">Total</p>
-              <p className="font-serif text-sm text-cream leading-none">
-                {total > 0 ? `$${total.toLocaleString('es-CL')}` : 'Consultar'}
-              </p>
-            </div>
-
-            <button
-              onClick={() => setModalOpen(true)}
-              className="flex-shrink-0 bg-accent text-cream font-sans text-[10px] font-medium tracking-[0.1em] uppercase px-4 h-8 hover:bg-accent-light transition-colors duration-300 whitespace-nowrap"
-            >
-              Iniciar →
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
