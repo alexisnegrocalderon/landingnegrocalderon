@@ -20,7 +20,7 @@ export default function Footer() {
               </div>
               <div>
                 <span className="font-serif text-cream text-lg tracking-tight">
-                  Negro<span className="text-accent">c</span>Alderon
+                  negroc<span className="text-accent">AI</span>deron
                 </span>
                 <p className="font-sans text-[9px] tracking-[0.25em] uppercase text-cream/25">Creative Studio</p>
               </div>

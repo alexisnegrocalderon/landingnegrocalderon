@@ -108,7 +108,7 @@ export default function Services() {
             className="mb-14"
           >
             <p className="font-sans text-[10px] text-accent/50 uppercase tracking-[0.28em] mb-3">
-              02 — Servicios
+              04 — Servicios
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4.5vw,3.5rem)] font-light leading-tight text-cream">
               Arma tu presupuesto.<br />
@@ -165,7 +165,7 @@ export default function Services() {
                 </div>
                 <button
                   onClick={() => setModalOpen(true)}
-                  className="bg-accent text-cream font-sans text-xs font-medium tracking-[0.06em] px-5 py-2.5 rounded-full hover:bg-accent-light transition-colors duration-300 whitespace-nowrap"
+                  className="bg-accent text-cream font-sans text-xs font-medium tracking-[0.08em] uppercase px-5 py-2.5 hover:bg-accent-light transition-colors duration-300 whitespace-nowrap"
                 >
                   Iniciar proyecto →
                 </button>

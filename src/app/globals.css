@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --dark: #09070A;
-  --surface: #110E08;
-  --accent: #C87C3A;
-  --cream: #F4EEE4;
+  --dark: #080604;
+  --surface: #0F0C09;
+  --accent: #C0392B;
+  --cream: #F2EDE6;
 }
 
 html {
@@ -39,12 +39,7 @@ body::before {
   display: block;
 }
 
-/* Pulsing dot */
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
-}
-.dot-pulse { animation: pulse-dot 2s ease-in-out infinite; }
+/* Section fade-in (kept for compatibility) */
 
 /* Section fade-in */
 @layer utilities {

@@ -22,6 +22,7 @@ export default function Process() {
           <p className="font-sans text-[10px] text-accent/50 uppercase tracking-[0.28em] mb-3">
             06 — Proceso
           </p>
+
           <h2 className="font-serif text-[clamp(2.2rem,4.5vw,3.5rem)] font-light leading-tight text-cream">
             Simple. Rápido. <em className="text-accent italic">Tuyo.</em>
           </h2>
