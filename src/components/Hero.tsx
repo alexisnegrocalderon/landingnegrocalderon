@@ -179,32 +179,6 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator — points UP (content is above in inverted layout) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.8, duration: 0.8 }}
-          className="flex flex-col items-center gap-2"
-        >
-          <motion.div
-            animate={{ y: [0, -7, 0] }}
-            transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-            className="text-dark/35"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path
-                d="M9 14V4M9 4L3 10M9 4L15 10"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </motion.div>
-          <span className="font-sans text-[9px] uppercase tracking-[0.22em] text-dark/30">
-            Deslizar
-          </span>
-        </motion.div>
       </div>
 
       {/* Stats bar */}
