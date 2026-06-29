@@ -11,17 +11,34 @@ type Service = {
   desc: string
   tag: string
   featured?: boolean
+  skyVariant: 'night' | 'dawn' | 'sunset' | 'dusk'
 }
 
 const services: Service[] = [
-  { id: 'logo',    title: 'Diseño de Logo',             price: '$21.285',   amount: 21285,  tag: 'IDENTIDAD', desc: 'Identidad visual única, vectores y manual de marca básico.' },
-  { id: 'express', title: 'Sitio Web Express',           price: '$58.500',   amount: 58500,  tag: 'EXPRESS',   desc: 'Sitio rápido y optimizado. Listo en días, listo para vender.' },
-  { id: 'wow',     title: 'Sitio "WOW Effect"',          price: '$133.500',  amount: 133500, tag: 'DESTACADO', desc: 'El sitio que hace que tus clientes se detengan y digan WOW. Animaciones cinematográficas, diseño con alma, presencia que se recuerda.', featured: true },
-  { id: 'premium', title: 'Sitio Web Premium',           price: '$210.000',  amount: 210000, tag: 'PREMIUM',   desc: 'Ecosistema digital completo. Tu marca a otro nivel.' },
-  { id: 'redes',   title: 'Gestión de Redes Sociales',   price: 'Consultar', amount: null,   tag: 'SOCIAL',    desc: 'Community manager estratégico para escalar tu comunidad.' },
-  { id: 'posts',   title: 'Diseño de Posts',             price: 'Consultar', amount: null,   tag: 'CONTENIDO', desc: 'Pack de contenido visual semanal con identidad de marca.' },
-  { id: 'videos',  title: 'Videos Reels',                price: '$15.000/u', amount: 15000,  tag: 'VIDEO',     desc: 'Reels editados para captar atención y convertir en segundos.' },
-  { id: 'ia',      title: 'Agente con IA',               price: 'Consultar', amount: null,   tag: 'IA',        desc: 'Automatización inteligente que trabaja por tu negocio 24/7.' },
+  { id: 'logo',    title: 'Diseño de Logo',           price: '$21.285',   amount: 21285,  tag: 'IDENTIDAD', skyVariant: 'night',  desc: 'Identidad visual única, vectores y manual de marca básico.' },
+  { id: 'express', title: 'Sitio Web Express',         price: '$58.500',   amount: 58500,  tag: 'EXPRESS',   skyVariant: 'dawn',   desc: 'Sitio rápido y optimizado. Listo en días, listo para vender.' },
+  { id: 'wow',     title: 'Sitio "WOW Effect"',        price: '$133.500',  amount: 133500, tag: 'DESTACADO', skyVariant: 'sunset', desc: 'El sitio que hace que tus clientes se detengan y digan WOW. Animaciones cinematográficas, diseño con alma, presencia que se recuerda.', featured: true },
+  { id: 'premium', title: 'Sitio Web Premium',         price: '$210.000',  amount: 210000, tag: 'PREMIUM',   skyVariant: 'dusk',   desc: 'Ecosistema digital completo. Tu marca a otro nivel.' },
+  { id: 'redes',   title: 'Gestión de Redes',          price: 'Consultar', amount: null,   tag: 'SOCIAL',    skyVariant: 'night',  desc: 'Community manager estratégico para escalar tu comunidad.' },
+  { id: 'posts',   title: 'Diseño de Posts',           price: 'Consultar', amount: null,   tag: 'CONTENIDO', skyVariant: 'dawn',   desc: 'Pack de contenido visual semanal con identidad de marca.' },
+  { id: 'videos',  title: 'Videos Reels',              price: '$15.000/u', amount: 15000,  tag: 'VIDEO',     skyVariant: 'dusk',   desc: 'Reels editados para captar atención y convertir en segundos.' },
+  { id: 'ia',      title: 'Agente con IA',             price: 'Consultar', amount: null,   tag: 'IA',        skyVariant: 'night',  desc: 'Automatización inteligente que trabaja por tu negocio 24/7.' },
+]
+
+const SKY: Record<string, string> = {
+  night:  'linear-gradient(180deg, #0B1E3A 0%, #071428 55%, #040E1C 100%)',
+  dawn:   'linear-gradient(180deg, #1A1530 0%, #0E0E28 40%, #08091E 100%)',
+  sunset: 'linear-gradient(180deg, #3D1205 0%, #6B2008 25%, #2E0E05 55%, #120602 100%)',
+  dusk:   'linear-gradient(180deg, #1C0E2A 0%, #140A20 50%, #0A0614 100%)',
+}
+
+const STARS_A = [
+  {x:12,y:15},{x:28,y:8},{x:44,y:22},{x:62,y:12},{x:78,y:28},{x:90,y:10},
+  {x:18,y:38},{x:50,y:30},{x:82,y:35},{x:35,y:48},{x:68,y:42},
+]
+const STARS_B = [
+  {x:8,y:20},{x:22,y:12},{x:48,y:18},{x:70,y:8},{x:88,y:25},
+  {x:32,y:40},{x:55,y:45},{x:75,y:38},{x:15,y:50},{x:92,y:45},
 ]
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -30,6 +47,11 @@ function WindowCard({ service, selected, onToggle, index }: {
   service: Service; selected: boolean; onToggle: () => void; index: number
 }) {
   const isFeatured = service.featured
+  const stars = index % 2 === 0 ? STARS_A : STARS_B
+  const showStars = service.skyVariant === 'night' || service.skyVariant === 'dawn'
+  const skyBg = selected
+    ? 'linear-gradient(180deg, #1A0806 0%, #120503 50%, #0A0301 100%)'
+    : SKY[service.skyVariant]
 
   return (
     <motion.div
@@ -38,120 +60,172 @@ function WindowCard({ service, selected, onToggle, index }: {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.7, ease: EASE, delay: index * 0.08 }}
-      className={`relative cursor-none ${isFeatured ? 'md:col-span-2' : ''}`}
+      transition={{ duration: 0.7, ease: EASE, delay: index * 0.07 }}
+      className={`relative cursor-none group ${isFeatured ? 'md:col-span-2' : ''}`}
     >
-      {/* Window outer frame — aluminum surround */}
+      {/* Outer window frame — thick visible border */}
       <div
-        className={`relative p-[3px] transition-all duration-500 ${
-          isFeatured ? 'rounded-[28px]' : 'rounded-[24px]'
-        } ${
-          selected
-            ? 'bg-gradient-to-br from-accent/60 via-accent/30 to-accent/10'
+        className={`overflow-hidden transition-all duration-500 ${isFeatured ? 'rounded-[36px]' : 'rounded-[30px]'}`}
+        style={{
+          border: selected
+            ? '2px solid rgba(192,57,43,0.65)'
             : isFeatured
-              ? 'bg-gradient-to-br from-amber-400/25 via-orange-300/10 to-transparent'
-              : 'bg-gradient-to-br from-cream/12 via-cream/5 to-transparent'
-        }`}
-        style={
-          selected
-            ? { boxShadow: '0 0 40px rgba(192,57,43,0.20), 0 0 80px rgba(192,57,43,0.08)' }
+              ? '2px solid rgba(255,150,40,0.45)'
+              : '2px solid rgba(242,237,230,0.22)',
+          boxShadow: selected
+            ? '0 0 50px rgba(192,57,43,0.22), inset 0 0 60px rgba(0,0,0,0.5)'
             : isFeatured
-              ? { boxShadow: '0 0 50px rgba(255,180,40,0.12), 0 0 100px rgba(255,140,20,0.06)' }
-              : {}
-        }
+              ? '0 0 70px rgba(255,110,20,0.22), inset 0 0 60px rgba(0,0,0,0.6)'
+              : '0 8px 40px rgba(0,0,0,0.55)',
+        }}
       >
-        {/* Window inner glass */}
+        {/* Inner window frame — double pane */}
         <div
-          className={`relative overflow-hidden transition-all duration-500 ${
-            isFeatured ? 'rounded-[26px]' : 'rounded-[22px]'
-          } ${
-            selected ? 'bg-[#1A0C0A]' : isFeatured ? 'bg-[#100C06]' : 'bg-[#0C0A08]'
-          }`}
+          className={`m-[5px] overflow-hidden ${isFeatured ? 'rounded-[32px]' : 'rounded-[26px]'}`}
           style={{
-            padding: isFeatured ? '28px 32px' : '22px 24px',
-            minHeight: isFeatured ? '220px' : '180px',
+            border: selected
+              ? '1px solid rgba(192,57,43,0.25)'
+              : isFeatured
+                ? '1px solid rgba(255,150,40,0.18)'
+                : '1px solid rgba(242,237,230,0.07)',
           }}
         >
-          {/* Sky view through window — top area */}
+
+          {/* Sky view — the actual window glass */}
           <div
-            className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
+            className="relative overflow-hidden"
             style={{
-              background: selected
-                ? 'linear-gradient(180deg, rgba(192,57,43,0.08) 0%, transparent 100%)'
-                : isFeatured
-                  ? 'linear-gradient(180deg, rgba(255,160,40,0.07) 0%, transparent 100%)'
-                  : 'linear-gradient(180deg, rgba(4,14,32,0.60) 0%, transparent 100%)',
+              height: isFeatured ? '180px' : '130px',
+              background: skyBg,
             }}
-          />
+          >
+            {/* Stars for night/dawn skies */}
+            {showStars && !selected && (
+              <svg className="absolute inset-0 w-full h-full" aria-hidden>
+                {stars.map((s, i) => (
+                  <circle
+                    key={i}
+                    cx={`${s.x}%`}
+                    cy={`${s.y}%`}
+                    r={i % 3 === 0 ? 1.5 : 1}
+                    fill={`rgba(210,225,255,${i % 2 === 0 ? 0.75 : 0.45})`}
+                  />
+                ))}
+              </svg>
+            )}
 
-          {/* Inner window frame — double pane effect */}
-          <div
-            className={`absolute inset-3 rounded-[18px] border pointer-events-none ${
-              selected ? 'border-accent/15' : isFeatured ? 'border-amber-400/10' : 'border-cream/[0.04]'
-            }`}
-          />
+            {/* Sunset horizon glow */}
+            {service.skyVariant === 'sunset' && !selected && (
+              <>
+                <div className="absolute bottom-0 left-0 right-0 h-20"
+                  style={{ background: 'linear-gradient(0deg, rgba(255,80,10,0.35) 0%, rgba(255,120,20,0.15) 50%, transparent 100%)' }} />
+                <div className="absolute bottom-6 left-1/4 right-1/4 h-px"
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,160,40,0.6), transparent)', filter: 'blur(1px)' }} />
+              </>
+            )}
 
-          {/* Tag + featured badge */}
-          <div className="relative z-10 flex items-center justify-between mb-4">
-            <span className={`font-sans text-[8px] tracking-[0.3em] uppercase ${
-              selected ? 'text-accent' : isFeatured ? 'text-amber-400/70' : 'text-cream/20'
-            }`}>
-              {service.tag}
-            </span>
-            {isFeatured && (
-              <span className="font-sans text-[7px] tracking-[0.25em] uppercase bg-amber-400/15 border border-amber-400/30 text-amber-300/80 px-2 py-0.5 rounded-full">
-                ★ Recomendado
+            {/* Dusk purple-pink glow */}
+            {service.skyVariant === 'dusk' && !selected && (
+              <div className="absolute bottom-0 left-0 right-0 h-16"
+                style={{ background: 'linear-gradient(0deg, rgba(180,40,120,0.2) 0%, rgba(100,20,160,0.1) 50%, transparent 100%)' }} />
+            )}
+
+            {/* Cabin light reflection on glass — subtle highlight at top */}
+            <div className="absolute top-0 left-0 right-0 h-8 pointer-events-none"
+              style={{ background: 'linear-gradient(180deg, rgba(242,237,230,0.04) 0%, transparent 100%)' }} />
+
+            {/* Tag badge — top left */}
+            <div className="absolute top-4 left-5">
+              <span className={`font-sans text-[8px] tracking-[0.28em] uppercase ${
+                selected ? 'text-accent/80' : isFeatured ? 'text-amber-300/75' : 'text-cream/40'
+              }`}>
+                {service.tag}
               </span>
+            </div>
+
+            {/* Featured / selected status badges */}
+            {isFeatured && (
+              <div className="absolute top-3.5 right-5">
+                <span className="font-sans text-[7px] tracking-[0.2em] uppercase bg-amber-400/20 border border-amber-400/45 text-amber-200/90 px-2 py-0.5 rounded-sm">
+                  ★ Recomendado
+                </span>
+              </div>
             )}
             {selected && !isFeatured && (
-              <span className="font-sans text-[7px] tracking-[0.2em] uppercase text-accent/60">● En vuelo</span>
+              <div className="absolute top-3.5 right-5">
+                <span className="font-sans text-[7px] tracking-[0.2em] uppercase text-accent/80">● En vuelo</span>
+              </div>
             )}
+
+            {/* Horizon line */}
+            <div className="absolute bottom-0 left-0 right-0 h-px"
+              style={{
+                background: selected
+                  ? 'linear-gradient(90deg, transparent, rgba(192,57,43,0.4), transparent)'
+                  : isFeatured
+                    ? 'linear-gradient(90deg, transparent, rgba(255,140,30,0.3), transparent)'
+                    : 'linear-gradient(90deg, transparent, rgba(242,237,230,0.12), transparent)',
+              }}
+            />
           </div>
 
-          {/* Service name */}
-          <h3
-            className={`relative z-10 font-serif font-light leading-tight mb-2 transition-colors duration-300 ${
-              selected ? 'text-cream' : isFeatured ? 'text-cream/90' : 'text-cream/65'
-            }`}
-            style={{ fontSize: isFeatured ? 'clamp(1.3rem, 2.5vw, 1.8rem)' : 'clamp(1rem, 1.8vw, 1.3rem)' }}
-          >
-            {service.title}
-          </h3>
-
-          {/* Description */}
-          <p className={`relative z-10 font-sans leading-relaxed mb-5 ${
-            isFeatured ? 'text-sm text-cream/40' : 'text-xs text-cream/28'
-          }`}>
-            {service.desc}
-          </p>
-
-          {/* Bottom row: price + select */}
-          <div className="relative z-10 flex items-end justify-between gap-4 mt-auto">
-            <div>
-              <p className="font-sans text-[7px] tracking-[0.2em] uppercase text-cream/18 mb-1">PRECIO</p>
-              <p
-                className={`font-serif font-light leading-none transition-colors duration-300 ${
-                  selected ? 'text-accent' : isFeatured ? 'text-amber-300/80' : 'text-cream/55'
-                }`}
-                style={{ fontSize: isFeatured ? 'clamp(1.8rem, 3vw, 2.8rem)' : 'clamp(1.4rem, 2.2vw, 2rem)' }}
-              >
-                {service.price}
-              </p>
-            </div>
-
-            <div className={`flex items-center gap-2 border px-3 py-1.5 transition-all duration-300 ${
-              selected
-                ? 'border-accent/50 bg-accent/10 text-accent'
+          {/* Window sill / content panel */}
+          <div
+            style={{
+              background: selected
+                ? '#160806'
                 : isFeatured
-                  ? 'border-amber-400/25 text-amber-300/60 hover:border-amber-400/50'
-                  : 'border-cream/12 text-cream/30 hover:border-cream/25'
+                  ? '#100905'
+                  : '#0D0B08',
+              padding: isFeatured ? '22px 26px 24px' : '18px 22px 20px',
+            }}
+          >
+            {/* Service name */}
+            <h3
+              className={`font-serif font-light leading-tight mb-2 transition-colors duration-300 ${
+                selected ? 'text-cream' : isFeatured ? 'text-cream/90' : 'text-cream/80'
+              }`}
+              style={{ fontSize: isFeatured ? 'clamp(1.35rem, 2.5vw, 1.85rem)' : 'clamp(1.05rem, 1.8vw, 1.35rem)' }}
+            >
+              {service.title}
+            </h3>
+
+            {/* Description */}
+            <p className={`font-sans leading-relaxed mb-5 ${
+              isFeatured ? 'text-sm text-cream/40' : 'text-xs text-cream/30'
             }`}>
-              {selected && <span className="text-accent text-[9px]">✓</span>}
-              <span className="font-sans text-[8px] tracking-[0.18em] uppercase">
-                {selected ? 'Añadido' : 'Añadir'}
-              </span>
+              {service.desc}
+            </p>
+
+            {/* Price + action */}
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="font-sans text-[7px] tracking-[0.22em] uppercase text-cream/18 mb-1">PRECIO</p>
+                <p
+                  className={`font-serif font-light leading-none transition-colors duration-300 ${
+                    selected ? 'text-accent' : isFeatured ? 'text-amber-300/85' : 'text-cream/65'
+                  }`}
+                  style={{ fontSize: isFeatured ? 'clamp(1.8rem, 3vw, 2.6rem)' : 'clamp(1.4rem, 2.2vw, 1.9rem)' }}
+                >
+                  {service.price}
+                </p>
+              </div>
+
+              <div className={`flex items-center gap-2 border px-3 py-1.5 transition-all duration-300 ${
+                selected
+                  ? 'border-accent/55 bg-accent/12 text-accent'
+                  : isFeatured
+                    ? 'border-amber-400/30 text-amber-300/65 group-hover:border-amber-400/55'
+                    : 'border-cream/15 text-cream/40 group-hover:border-cream/30'
+              }`}>
+                {selected && <span className="text-[9px]">✓</span>}
+                <span className="font-sans text-[8px] tracking-[0.2em] uppercase">
+                  {selected ? 'Añadido' : 'Añadir'}
+                </span>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </motion.div>
@@ -173,23 +247,31 @@ export default function Services() {
       <section
         id="servicios"
         className="relative py-24 md:py-32 px-6 md:px-16 lg:px-24 overflow-hidden"
-        style={{ background: 'linear-gradient(180deg, #060402 0%, #0C0904 15%, #0A0803 100%)' }}
+        style={{ background: 'linear-gradient(180deg, #070503 0%, #0C0904 20%, #090703 100%)' }}
       >
-        {/* Cabin overhead light effect */}
-        <div
-          className="absolute inset-0 pointer-events-none"
+        {/* Cabin overhead reading light — visible amber strip */}
+        <div className="absolute top-0 left-0 right-0 h-[3px] pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at 50% -5%, rgba(255,200,120,0.07) 0%, transparent 50%)',
+            background: 'linear-gradient(90deg, transparent 5%, rgba(255,185,70,0.6) 30%, rgba(255,200,90,0.85) 50%, rgba(255,185,70,0.6) 70%, transparent 95%)',
+          }}
+        />
+        {/* Overhead diffuse warm wash */}
+        <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,155,50,0.07) 0%, rgba(255,130,30,0.03) 60%, transparent 100%)',
           }}
         />
 
-        {/* Cabin ceiling strip — horizontal light band */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-          style={{
-            background: 'linear-gradient(90deg, transparent 5%, rgba(255,200,100,0.12) 30%, rgba(255,200,100,0.18) 50%, rgba(255,200,100,0.12) 70%, transparent 95%)',
-          }}
-        />
+        {/* Fuselage wall panel seam lines */}
+        {[18, 52, 78].map((pct) => (
+          <div key={pct}
+            className="absolute left-0 right-0 h-px pointer-events-none"
+            style={{
+              top: `${pct}%`,
+              background: 'linear-gradient(90deg, transparent 3%, rgba(242,237,230,0.035) 15%, rgba(242,237,230,0.035) 85%, transparent 97%)',
+            }}
+          />
+        ))}
 
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
@@ -207,12 +289,12 @@ export default function Services() {
               <em className="text-accent italic">Arma tu ruta.</em>
             </h2>
             <p className="font-sans text-sm text-cream/30 max-w-xs mt-3 leading-relaxed">
-              Cada ventana es un servicio. Selecciona los que necesitas y forma tu itinerario.
+              Cada ventana es un destino. Selecciona los que necesitas y forma tu itinerario.
             </p>
           </motion.div>
 
           {/* Windows grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
             {services.map((s, i) => (
               <WindowCard
                 key={s.id}
@@ -226,7 +308,7 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Flight itinerary — sticky bar */}
+      {/* Flight itinerary — sticky bottom bar */}
       <AnimatePresence>
         {selected.length > 0 && (
           <motion.div
@@ -236,13 +318,12 @@ export default function Services() {
             transition={{ type: 'spring', damping: 32, stiffness: 360 }}
             className="fixed bottom-0 left-0 right-0 z-40"
             style={{
-              background: 'rgba(10,8,6,0.97)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
+              background: 'rgba(8,6,4,0.97)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderTop: '1px solid rgba(242,237,230,0.08)',
             }}
           >
-            {/* Header strip */}
             <div className="px-4 md:px-8 pt-2.5 pb-0 flex items-center gap-3">
               <span className="font-sans text-[7px] tracking-[0.35em] uppercase text-cream/25">
                 ✈ TU ITINERARIO
@@ -253,9 +334,7 @@ export default function Services() {
               </span>
             </div>
 
-            {/* Escalas route */}
             <div className="px-4 md:px-8 py-2.5 flex items-center gap-0 overflow-x-auto no-scrollbar">
-              {/* Origin */}
               <div className="flex-shrink-0 text-center mr-2">
                 <p className="font-sans text-[8px] tracking-[0.2em] uppercase text-cream/30 leading-none">ORIGEN</p>
                 <p className="font-serif text-xs text-cream/50 leading-none mt-0.5">SCL</p>
@@ -263,14 +342,12 @@ export default function Services() {
 
               {selectedServices.map((s) => (
                 <div key={s.id} className="flex items-center flex-shrink-0">
-                  {/* Connector */}
-                  <div className="flex items-center gap-0">
+                  <div className="flex items-center">
                     <div className="w-4 h-px border-t border-dashed border-cream/15" />
                     <span className="text-accent/50 font-sans text-[8px] mx-0.5">✈</span>
                     <div className="w-4 h-px border-t border-dashed border-cream/15" />
                   </div>
-                  {/* Stop card */}
-                  <div className="flex items-center gap-1 border border-cream/[0.10] px-2 py-1 relative group">
+                  <div className="flex items-center gap-1 border border-cream/[0.10] px-2 py-1">
                     <span className="font-sans text-[8px] tracking-[0.08em] uppercase text-cream/55 whitespace-nowrap">
                       {s.title}
                     </span>
@@ -284,25 +361,20 @@ export default function Services() {
                 </div>
               ))}
 
-              {/* Connector to destination */}
               <div className="flex items-center flex-shrink-0">
                 <div className="w-4 h-px border-t border-dashed border-cream/15" />
                 <span className="text-accent/50 font-sans text-[8px] mx-0.5">◉</span>
                 <div className="w-4 h-px border-t border-dashed border-cream/15" />
               </div>
 
-              {/* Destination */}
               <div className="flex-shrink-0 text-center ml-1">
                 <p className="font-sans text-[8px] tracking-[0.2em] uppercase text-cream/30 leading-none">DESTINO</p>
                 <p className="font-serif text-xs text-cream/50 leading-none mt-0.5">TU MARCA</p>
               </div>
 
-              {/* Spacer + total + CTA */}
               <div className="flex-shrink-0 flex items-center gap-3 ml-4 pl-4 border-l border-cream/[0.08]">
                 <div>
-                  <p className="font-sans text-[7px] tracking-[0.15em] uppercase text-cream/25 leading-none mb-0.5">
-                    TOTAL
-                  </p>
+                  <p className="font-sans text-[7px] tracking-[0.15em] uppercase text-cream/25 leading-none mb-0.5">TOTAL</p>
                   <p className="font-serif text-sm text-cream leading-none">
                     {total > 0 ? `$${total.toLocaleString('es-CL')}` : 'Consultar'}
                   </p>
