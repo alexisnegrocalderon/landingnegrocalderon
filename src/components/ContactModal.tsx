@@ -16,10 +16,33 @@ export default function ContactModal({ isOpen, onClose, selectedServices, total 
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200))
+
+    const serviciosTexto = selectedServices.length > 0
+      ? selectedServices.map((s) => `• ${s.title} — ${s.price}`).join('\n')
+      : '(sin servicios seleccionados)'
+
+    const totalTexto = total > 0
+      ? `\n💰 *Total estimado:* $${total.toLocaleString('es-CL')}`
+      : ''
+
+    const mensaje = `🚀 *Nueva solicitud de proyecto*
+
+👤 *Nombre:* ${form.nombre}
+📧 *Email:* ${form.email}
+📸 *Instagram:* ${form.instagram || '—'}
+
+🛠️ *Servicios:*
+${serviciosTexto}${totalTexto}
+
+📝 *Proyecto:*
+${form.notas}`
+
+    const url = `https://wa.me/56939548475?text=${encodeURIComponent(mensaje)}`
+    window.open(url, '_blank')
+
     setLoading(false)
     setSent(true)
   }
