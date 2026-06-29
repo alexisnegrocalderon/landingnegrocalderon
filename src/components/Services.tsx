@@ -1,6 +1,6 @@
 'use client'
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import ContactModal from './ContactModal'
 
 type Service = {
@@ -23,57 +23,63 @@ const services: Service[] = [
   { id: 'ia', title: 'Agente con IA', price: 'Consultar', amount: null, desc: 'Automatización inteligente que trabaja por tu negocio 24/7.', tag: 'IA' },
 ]
 
-function ServiceCard({ service, selected, onToggle, index }: {
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
+function ServiceRow({ service, selected, onToggle, index }: {
   service: Service; selected: boolean; onToggle: () => void; index: number
 }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const rotateX = useMotionValue(0)
-  const rotateY = useMotionValue(0)
-  const springRX = useSpring(rotateX, { stiffness: 150, damping: 20 })
-  const springRY = useSpring(rotateY, { stiffness: 150, damping: 20 })
-
-  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current!.getBoundingClientRect()
-    rotateY.set(((e.clientX - rect.left) / rect.width - 0.5) * 10)
-    rotateX.set(-((e.clientY - rect.top) / rect.height - 0.5) * 7)
-  }
-
   return (
     <motion.div
-      ref={cardRef}
-      onMouseMove={onMouseMove}
-      onMouseLeave={() => { rotateX.set(0); rotateY.set(0) }}
       onClick={onToggle}
       data-cursor="hover"
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: (index % 2) * 0.08 }}
-      style={{ rotateX: springRX, rotateY: springRY, transformPerspective: 900 }}
-      className={`relative p-6 md:p-7 rounded-2xl border cursor-none transition-all duration-400 group ${
-        selected
-          ? 'bg-accent/10 border-accent/40 shadow-[0_0_40px_rgba(139,92,246,0.15)]'
-          : 'bg-surface border-cream/[0.08] hover:border-accent/25 hover:bg-surface-2'
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, ease: EASE, delay: index * 0.06 }}
+      className={`group relative flex items-start md:items-center gap-6 md:gap-10 py-7 border-b cursor-none transition-colors duration-300 ${
+        selected ? 'border-accent/30' : 'border-cream/[0.07] hover:border-cream/[0.12]'
       }`}
     >
-      {/* Selection indicator */}
-      <div className={`absolute top-5 right-5 w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-300 ${
-        selected ? 'bg-accent border-accent text-cream' : 'border-cream/20'
+      {/* Index number */}
+      <span className={`font-serif text-5xl md:text-6xl font-light leading-none w-16 flex-shrink-0 transition-colors duration-300 ${
+        selected ? 'text-accent' : 'text-cream/[0.08] group-hover:text-cream/[0.14]'
       }`}>
-        {selected && <span className="text-[10px] font-bold">✓</span>}
-      </div>
+        {String(index + 1).padStart(2, '0')}
+      </span>
 
-      <div className="relative z-10">
-        <span className="font-sans text-[9px] text-accent/60 uppercase tracking-[0.2em] font-medium">{service.tag}</span>
-        <h3 className={`font-serif text-xl md:text-2xl mt-2 mb-2 leading-tight transition-colors duration-300 ${selected ? 'text-cream' : 'text-cream/80'}`}>
-          {service.title}
-        </h3>
-        <p className="font-sans text-sm text-cream/35 leading-relaxed mb-4">{service.desc}</p>
-        <div className="flex items-center justify-between">
-          <span className="font-serif text-lg text-accent">{service.price}</span>
-          <span className={`font-sans text-xs transition-colors duration-300 ${selected ? 'text-accent' : 'text-cream/25 group-hover:text-accent/50'}`}>
-            {selected ? 'Seleccionado ✓' : 'Seleccionar →'}
-          </span>
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-6">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-1">
+              <h3 className={`font-serif text-xl md:text-2xl font-light leading-tight transition-colors duration-300 ${
+                selected ? 'text-cream' : 'text-cream/75 group-hover:text-cream'
+              }`}>
+                {service.title}
+              </h3>
+              <span className={`hidden md:inline font-sans text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 rounded-full transition-colors duration-300 ${
+                selected ? 'bg-accent/15 text-accent' : 'bg-cream/[0.05] text-cream/25'
+              }`}>
+                {service.tag}
+              </span>
+            </div>
+            <p className="font-sans text-sm text-cream/30 leading-relaxed">
+              {service.desc}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <span className={`font-serif text-lg transition-colors duration-300 ${
+              selected ? 'text-accent' : 'text-cream/50'
+            }`}>
+              {service.price}
+            </span>
+            <div className={`w-6 h-6 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+              selected ? 'bg-accent border-accent' : 'border-cream/20 group-hover:border-cream/40'
+            }`}>
+              {selected && <span className="text-cream text-[10px] font-bold leading-none">✓</span>}
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -93,29 +99,30 @@ export default function Services() {
   return (
     <>
       <section id="servicios" className="py-24 md:py-32 px-6 md:px-16 lg:px-24 bg-dark">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-16"
+            transition={{ duration: 0.8, ease: EASE }}
+            className="mb-14"
           >
             <p className="font-sans text-[10px] text-accent/50 uppercase tracking-[0.28em] mb-3">
               02 — Servicios
             </p>
             <h2 className="font-serif text-[clamp(2.2rem,4.5vw,3.5rem)] font-light leading-tight text-cream">
               Arma tu presupuesto.<br />
-              <em className="text-accent not-italic italic">Tú decides el alcance.</em>
+              <em className="text-accent italic">Tú decides el alcance.</em>
             </h2>
             <p className="font-sans text-sm text-cream/35 max-w-md mt-4 leading-relaxed">
               Selecciona los servicios que necesitas y verás el total en tiempo real.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Border at top of list */}
+          <div className="border-t border-cream/[0.07]">
             {services.map((s, i) => (
-              <ServiceCard
+              <ServiceRow
                 key={s.id}
                 service={s}
                 selected={selected.includes(s.id)}

@@ -1,53 +1,38 @@
 'use client'
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 
 export default function CircleSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], ['8%', '-8%'])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.88, 1, 0.88])
+  const y = useTransform(scrollYProgress, [0, 1], ['6%', '-6%'])
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0])
+
+  const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
   return (
     <section
       ref={ref}
-      className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-surface"
+      className="relative py-32 md:py-48 px-6 md:px-16 lg:px-24 flex flex-col md:flex-row items-center justify-between gap-16 overflow-hidden bg-surface"
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 65%)', filter: 'blur(60px)' }}
-        />
-      </div>
-
-      <motion.div
-        style={{
-          y, scale, opacity,
-          width: 'min(70vw, 500px)',
-          aspectRatio: '1',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle at 35% 30%, rgba(200,170,255,0.2) 0%, rgba(139,92,246,0.1) 45%, transparent 75%)',
-          border: '1px solid rgba(167,139,250,0.12)',
-        }}
-      />
-
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 pointer-events-none">
+      {/* Text left */}
+      <div className="flex-1 max-w-lg">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-[10px] tracking-[0.28em] uppercase text-accent/60 mb-4"
+          transition={{ delay: 0.1, duration: 0.9, ease: EASE }}
+          className="font-sans text-[10px] tracking-[0.28em] uppercase text-accent/60 mb-5"
         >
           La diferencia
         </motion.p>
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.35, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif text-cream text-[clamp(2rem,5vw,3.5rem)] font-light leading-tight max-w-lg"
+          transition={{ delay: 0.2, duration: 0.9, ease: EASE }}
+          className="font-serif text-cream text-[clamp(2.2rem,5vw,4rem)] font-light leading-[0.92] tracking-[-0.02em] mb-6"
         >
           Tu presencia digital,{' '}
           <em className="text-accent italic">redefinida.</em>
@@ -56,12 +41,40 @@ export default function CircleSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 1.0 }}
-          className="font-sans text-cream/30 text-sm mt-5 max-w-xs leading-relaxed"
+          transition={{ delay: 0.35, duration: 0.9 }}
+          className="font-sans text-cream/30 text-sm leading-relaxed max-w-sm"
         >
-          Sitios que generan conversaciones, no solo clics.
+          No construyo páginas web. Construyo la primera impresión que tu cliente
+          tendrá de ti — y esa impresión genera conversaciones, no solo clics.
         </motion.p>
+
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.0, ease: EASE, delay: 0.5 }}
+          className="h-px bg-gradient-to-r from-accent/30 to-transparent mt-10 origin-left"
+          style={{ maxWidth: 200 }}
+        />
       </div>
+
+      {/* NC cube right — parallax */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative flex-shrink-0 w-[70vw] max-w-[340px] md:w-[32vw] md:max-w-[420px] aspect-square"
+      >
+        <div
+          className="w-full h-full animate-float-cube"
+          style={{ mixBlendMode: 'screen' }}
+        >
+          <Image
+            src="/logo-nc.png"
+            alt="NegrocAlderon"
+            fill
+            className="object-contain"
+          />
+        </div>
+      </motion.div>
     </section>
   )
 }

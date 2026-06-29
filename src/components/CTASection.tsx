@@ -7,15 +7,7 @@ export default function CTASection() {
 
   return (
     <section id="contacto" className="relative py-32 md:py-48 px-6 md:px-16 overflow-hidden bg-dark">
-      {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 65%)', filter: 'blur(80px)' }}
-        />
-      </div>
-
-      <div className="relative max-w-4xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

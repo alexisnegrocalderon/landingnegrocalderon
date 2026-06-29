@@ -9,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        dark: "#07050F",
-        surface: "#0E0B1C",
-        "surface-2": "#160F2E",
-        accent: "#8B5CF6",
-        "accent-light": "#A78BFA",
-        cream: "#F0EBF8",
+        dark: "#09070A",
+        surface: "#110E08",
+        "surface-2": "#1A1410",
+        accent: "#C87C3A",
+        "accent-light": "#E09050",
+        cream: "#F4EEE4",
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
@@ -25,11 +25,16 @@ const config: Config = {
       },
       animation: {
         marquee: "marquee 40s linear infinite",
+        "float-cube": "float-cube 10s ease-in-out infinite",
       },
       keyframes: {
         marquee: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-33.333%)" },
+        },
+        "float-cube": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-2.5%)" },
         },
       },
       transitionTimingFunction: {
