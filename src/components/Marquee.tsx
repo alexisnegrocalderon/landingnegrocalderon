@@ -1,6 +1,6 @@
 'use client'
 
-const ITEMS = ['Negro Calderón', 'Sitios WOW FX', 'Desde Chile al Mundo', 'Brand Ensuring™', 'Diseño con Alma', 'Presencia Digital', 'IA & Automatización', 'Marcas con Identidad']
+const ITEMS = ['negroc·AI·deron', 'Sitios que se Recuerdan', 'Chile → El Mundo', 'WOW FX', 'Brand Ensuring™', 'Diseño con Alma', 'Presencia Digital', 'IA & Movimiento']
 const tripled = [...ITEMS, ...ITEMS, ...ITEMS]
 
 export default function Marquee() {

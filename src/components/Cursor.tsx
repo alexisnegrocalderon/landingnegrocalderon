@@ -51,8 +51,8 @@ export default function Cursor() {
         animate={{
           width: state === 'view' ? 80 : state === 'hover' ? 44 : 28,
           height: state === 'view' ? 80 : state === 'hover' ? 44 : 28,
-          backgroundColor: state === 'hover' ? 'rgba(200,124,58,0.12)' : state === 'view' ? 'rgba(200,124,58,0.08)' : 'transparent',
-          borderColor: state === 'default' ? 'rgba(244,238,228,0.3)' : '#C87C3A',
+          backgroundColor: state === 'hover' ? 'rgba(192,57,43,0.12)' : state === 'view' ? 'rgba(192,57,43,0.08)' : 'transparent',
+          borderColor: state === 'default' ? 'rgba(242,237,230,0.3)' : '#C0392B',
         }}
         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
       >
