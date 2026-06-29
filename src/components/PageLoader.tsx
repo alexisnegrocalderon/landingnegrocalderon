@@ -16,7 +16,7 @@ export default function PageLoader() {
         <motion.div
           className="fixed inset-0 z-[100000] bg-dark flex items-center justify-center"
           exit={{
-            y: '-100%',
+            y: '100%',
             transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] },
           }}
         >
