@@ -1,22 +1,21 @@
 'use client'
-import { useScroll, useMotionValueEvent, motion, useMotionValue } from 'framer-motion'
+import { useScroll, useMotionValueEvent, motion } from 'framer-motion'
+import { useMotionValue } from 'framer-motion'
 import { useMagneticEffect } from '@/hooks/useMagneticEffect'
+import Image from 'next/image'
 
 export default function Nav() {
   const { scrollY } = useScroll()
-  const bg = useMotionValue('rgba(244,238,228,0)')
+  const bg = useMotionValue('rgba(7,5,15,0)')
   const blur = useMotionValue('blur(0px)')
-  const borderOpacity = useMotionValue(0)
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (latest > 60) {
-      bg.set('rgba(244,238,228,0.85)')
+      bg.set('rgba(7,5,15,0.85)')
       blur.set('blur(20px)')
-      borderOpacity.set(1)
     } else {
-      bg.set('rgba(244,238,228,0)')
+      bg.set('rgba(7,5,15,0)')
       blur.set('blur(0px)')
-      borderOpacity.set(0)
     }
   })
 
@@ -29,41 +28,44 @@ export default function Nav() {
         backgroundColor: bg,
         backdropFilter: blur,
         WebkitBackdropFilter: blur,
-        borderBottom: `1px solid rgba(28,27,24,${borderOpacity.get()})`,
+        borderBottom: '1px solid rgba(139,92,246,0.08)',
       }}
     >
-      {/* Logo */}
-      <a href="#" className="flex items-center gap-2 group" data-cursor="hover">
-        <span className="font-serif text-dark text-xl font-semibold tracking-tight">
-          Negro<span className="text-red">c</span>Alderon
-        </span>
+      <a href="#" className="flex items-center gap-3 group" data-cursor="hover">
+        <div className="relative w-9 h-9 flex-shrink-0" style={{ mixBlendMode: 'screen' }}>
+          <Image src="/logo-nc.png" alt="NC" fill className="object-contain" />
+        </div>
+        <div>
+          <span className="font-serif text-cream text-[17px] tracking-tight leading-none">
+            Negro<span className="text-accent">c</span>Alderon
+          </span>
+          <p className="font-sans text-[9px] tracking-[0.25em] uppercase text-cream/25 mt-0.5">Creative Studio</p>
+        </div>
       </a>
 
-      {/* Links */}
       <div className="hidden md:flex items-center gap-8">
-        {['Servicios', 'Portfolio', 'Proceso', 'Contacto'].map((link) => (
+        {['Servicios', 'Portafolio', 'Proceso', 'Testimonios'].map((link) => (
           <a
             key={link}
             href={`#${link.toLowerCase()}`}
             data-cursor="hover"
-            className="font-sans text-sm text-dark/60 hover:text-dark transition-colors duration-300 tracking-wide"
+            className="font-sans text-xs tracking-[0.12em] uppercase text-cream/35 hover:text-cream/80 transition-colors duration-300"
           >
             {link}
           </a>
         ))}
       </div>
 
-      {/* CTA */}
       <motion.a
         ref={btnRef as React.RefObject<HTMLAnchorElement>}
         href="#contacto"
         data-cursor="hover"
         style={{ x: btnX, y: btnY }}
-        className="relative font-sans text-sm font-medium bg-red text-cream px-5 py-2.5 rounded-full overflow-hidden group"
+        className="relative font-sans text-xs font-medium tracking-[0.08em] uppercase bg-accent text-cream px-5 py-2.5 rounded-full overflow-hidden"
       >
-        <span className="relative z-10">Consultar</span>
+        <span className="relative z-10">Cotizar</span>
         <motion.span
-          className="absolute inset-0 bg-dark rounded-full"
+          className="absolute inset-0 bg-accent-light rounded-full"
           initial={{ scale: 0, opacity: 0 }}
           whileHover={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}

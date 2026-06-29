@@ -9,10 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#F4EEE4",
-        dark: "#1C1B18",
-        red: "#C13D2E",
-        sand: "#C9B99A",
+        dark: "#07050F",
+        surface: "#0E0B1C",
+        "surface-2": "#160F2E",
+        accent: "#8B5CF6",
+        "accent-light": "#A78BFA",
+        cream: "#F0EBF8",
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
@@ -22,7 +24,7 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
       animation: {
-        marquee: "marquee 35s linear infinite",
+        marquee: "marquee 40s linear infinite",
       },
       keyframes: {
         marquee: {

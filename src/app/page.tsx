@@ -3,7 +3,8 @@ import Hero from '@/components/Hero'
 import Marquee from '@/components/Marquee'
 import Services from '@/components/Services'
 import CircleSection from '@/components/CircleSection'
-import Architect from '@/components/Architect'
+import Process from '@/components/Process'
+import CTASection from '@/components/CTASection'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -14,7 +15,8 @@ export default function Home() {
       <Marquee />
       <Services />
       <CircleSection />
-      <Architect />
+      <Process />
+      <CTASection />
       <Footer />
     </main>
   )

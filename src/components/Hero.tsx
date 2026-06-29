@@ -1,169 +1,237 @@
 'use client'
-import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
 import { useMagneticEffect } from '@/hooks/useMagneticEffect'
+
+function Counter({ from = 0, to, suffix = '' }: { from?: number; to: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true })
+  const [count, setCount] = useState(from)
+
+  useEffect(() => {
+    if (!inView) return
+    let start: number | null = null
+    const duration = 2000
+    const step = (ts: number) => {
+      if (!start) start = ts
+      const progress = Math.min((ts - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.floor(from + (to - from) * eased))
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [inView, from, to])
+
+  return <span ref={ref}>{count}{suffix}</span>
+}
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const containerVariants = {
   hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.14,
-      delayChildren: 1.6,
-    },
-  },
+  visible: { transition: { staggerChildren: 0.14, delayChildren: 1.7 } },
 }
 
 const lineVariants = {
-  hidden: { y: '110%', opacity: 0 },
-  visible: {
-    y: '0%',
-    opacity: 1,
-    transition: {
-      duration: 1.0,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-    },
-  },
+  hidden: { y: '110%' },
+  visible: { y: '0%', transition: { duration: 1.0, ease: EASE } },
 }
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  },
-}
-
-function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true })
-  const count = useMotionValue(0)
-  const rounded = useTransform(count, (v) => Math.round(v) + suffix)
-
-  useEffect(() => {
-    if (isInView) {
-      animate(count, to, { duration: 2.2, ease: 'easeOut' })
-    }
-  }, [isInView, count, to])
-
-  return <motion.span ref={ref}>{rounded}</motion.span>
+  visible: (d: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.8, delay: d, ease: EASE },
+  }),
 }
 
 export default function Hero() {
-  const { ref: cta1Ref, x: cta1X, y: cta1Y } = useMagneticEffect(0.3)
-  const { ref: cta2Ref, x: cta2X, y: cta2Y } = useMagneticEffect(0.3)
+  const { ref: primaryRef, x: px, y: py } = useMagneticEffect(0.4)
+  const { ref: secondaryRef, x: sx, y: sy } = useMagneticEffect(0.3)
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-20 px-6 md:px-12 overflow-hidden bg-cream">
-      {/* Background orbs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="orb-1 absolute -top-32 right-0 w-[500px] h-[500px] rounded-full bg-gradient-radial from-sand/40 to-transparent blur-3xl opacity-70" />
-        <div className="orb-2 absolute bottom-0 -left-24 w-[420px] h-[420px] rounded-full bg-gradient-radial from-red/10 to-transparent blur-3xl opacity-60" />
+    <section className="relative min-h-screen flex flex-col overflow-hidden bg-dark">
+
+      {/* Atmospheric background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute orb-1"
+          style={{
+            top: '-10%', right: '-5%',
+            width: '65vw', height: '65vw',
+            background: 'radial-gradient(ellipse, rgba(139,92,246,0.22) 0%, rgba(100,50,200,0.1) 40%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
+        <div
+          className="absolute orb-2"
+          style={{
+            bottom: '-15%', left: '-10%',
+            width: '50vw', height: '50vw',
+            background: 'radial-gradient(ellipse, rgba(80,30,160,0.18) 0%, transparent 65%)',
+            filter: 'blur(80px)',
+          }}
+        />
+        <div
+          className="absolute"
+          style={{
+            top: '30%', left: '40%',
+            width: '30vw', height: '30vw',
+            background: 'radial-gradient(ellipse, rgba(167,139,250,0.08) 0%, transparent 70%)',
+            filter: 'blur(40px)',
+          }}
+        />
+
+        {/* Glass spheres */}
+        <div
+          className="absolute orb-1"
+          style={{
+            top: '18%', right: '12%',
+            width: 220, height: 220,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 28%, rgba(200,170,255,0.22) 0%, rgba(139,92,246,0.1) 40%, transparent 75%)',
+            border: '1px solid rgba(167,139,250,0.12)',
+            boxShadow: '0 0 60px rgba(139,92,246,0.12), inset 0 0 40px rgba(167,139,250,0.06)',
+          }}
+        />
+        <div
+          className="absolute orb-3"
+          style={{
+            top: '55%', right: '28%',
+            width: 130, height: 130,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 35% 25%, rgba(200,170,255,0.18) 0%, rgba(139,92,246,0.08) 45%, transparent 75%)',
+            border: '1px solid rgba(167,139,250,0.1)',
+            boxShadow: '0 0 40px rgba(139,92,246,0.1)',
+          }}
+        />
+        <div
+          className="absolute orb-2"
+          style={{
+            bottom: '25%', left: '15%',
+            width: 90, height: 90,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 30%, rgba(200,170,255,0.15) 0%, transparent 70%)',
+            border: '1px solid rgba(167,139,250,0.08)',
+          }}
+        />
+
+        {/* Grid */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px)',
+            backgroundSize: '80px 80px',
+          }}
+        />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto w-full">
-        {/* Eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="font-sans text-xs text-dark/40 uppercase tracking-[0.2em] mb-8"
-        >
-          Presencia digital · Desde Chile al mundo
-        </motion.p>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col justify-center flex-1 px-6 md:px-16 lg:px-24 pt-28 pb-32">
 
-        {/* Main headline */}
+        <motion.div
+          custom={1.3}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="flex items-center gap-3 mb-10"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-accent dot-pulse" />
+          <span className="font-sans text-[11px] tracking-[0.22em] uppercase text-cream/40">
+            Diseño · IA · Movimiento
+          </span>
+        </motion.div>
+
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="mb-10"
+          className="mb-8"
         >
           <div className="reveal-clip">
             <motion.h1
               variants={lineVariants}
-              className="font-serif font-light text-[clamp(3.2rem,8vw,7.5rem)] leading-[0.95] tracking-tight text-dark"
+              className="font-serif text-[clamp(52px,8vw,96px)] font-light leading-[0.9] tracking-[-0.02em] text-cream"
             >
-              No potencio marcas.
+              No potencio
             </motion.h1>
           </div>
           <div className="reveal-clip">
             <motion.h1
               variants={lineVariants}
-              className="font-serif font-light text-[clamp(3.2rem,8vw,7.5rem)] leading-[0.95] tracking-tight italic text-red"
+              className="font-serif text-[clamp(52px,8vw,96px)] font-light leading-[0.9] tracking-[-0.02em] text-cream"
+            >
+              marcas.
+            </motion.h1>
+          </div>
+          <div className="reveal-clip">
+            <motion.h1
+              variants={lineVariants}
+              className="font-serif text-[clamp(52px,8vw,96px)] font-light leading-[0.9] tracking-[-0.02em] italic text-accent"
             >
               Potencio personas.
             </motion.h1>
           </div>
         </motion.div>
 
-        {/* Subtitle */}
-        <motion.div variants={containerVariants} initial="hidden" animate="visible">
-          <motion.p
-            variants={fadeUp}
-            className="font-sans text-base md:text-lg text-dark/55 max-w-md leading-relaxed mb-10"
-            style={{ transitionDelay: '0.2s' } as React.CSSProperties}
+        <motion.p
+          custom={2.2}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="font-sans text-sm md:text-base text-cream/40 max-w-sm leading-relaxed mb-10"
+        >
+          Experiencias digitales para marcas<br className="hidden md:block" /> que quieren sentirse del futuro.
+        </motion.p>
+
+        <motion.div
+          custom={2.5}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-wrap gap-4 items-center mb-16"
+        >
+          <motion.a
+            ref={primaryRef as React.RefObject<HTMLAnchorElement>}
+            href="#servicios"
+            data-cursor="hover"
+            style={{ x: px, y: py }}
+            className="group relative inline-flex items-center gap-2 bg-accent text-cream font-sans text-sm font-medium tracking-[0.06em] px-7 py-3.5 rounded-full overflow-hidden"
           >
-            Viaja por el mundo y construyo presencia digital con alma.
-            Shops, IA y automatización para marcas con identidad.
-          </motion.p>
+            <span className="relative z-10">Cotizar ahora</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <motion.span
+              className="absolute inset-0 rounded-full bg-accent-light"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </motion.a>
 
-          {/* CTAs */}
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-4 mb-16">
-            <motion.a
-              ref={cta1Ref as React.RefObject<HTMLAnchorElement>}
-              href="#servicios"
-              data-cursor="hover"
-              style={{ x: cta1X, y: cta1Y }}
-              className="relative font-sans text-sm font-medium bg-red text-cream px-7 py-3.5 rounded-full overflow-hidden group"
-            >
-              <span className="relative z-10">Ver tarifas</span>
-              <motion.span
-                className="absolute inset-0 bg-dark rounded-full"
-                initial={{ scale: 0, opacity: 0 }}
-                whileHover={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              />
-            </motion.a>
-
-            <motion.a
-              ref={cta2Ref as React.RefObject<HTMLAnchorElement>}
-              href="#contacto"
-              data-cursor="hover"
-              style={{ x: cta2X, y: cta2Y }}
-              className="font-sans text-sm font-medium border border-dark/25 text-dark px-7 py-3.5 rounded-full hover:border-dark transition-colors duration-300"
-            >
-              Consultar proyecto
-            </motion.a>
-          </motion.div>
+          <motion.a
+            ref={secondaryRef as React.RefObject<HTMLAnchorElement>}
+            href="#portafolio"
+            data-cursor="hover"
+            style={{ x: sx, y: sy }}
+            className="inline-flex items-center gap-2 border border-cream/15 text-cream/50 hover:text-cream/80 hover:border-cream/30 font-sans text-sm tracking-[0.06em] px-7 py-3.5 rounded-full transition-colors duration-300"
+          >
+            Ver portafolio
+          </motion.a>
         </motion.div>
 
-        {/* Stats strip */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.2, duration: 0.8 }}
-          className="flex flex-wrap items-center gap-8 md:gap-16 pt-8 border-t border-dark/10 mb-16"
+          custom={2.8}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-start gap-2"
         >
-          {[
-            { label: 'Chile', value: null, text: 'Chile' },
-            { label: 'Dinamarca', value: null, text: 'Dinamarca' },
-            { label: 'Proyectos', value: 200, suffix: '+' },
-            { label: 'Marca', value: null, text: 'Brand Ensuring™' },
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col gap-0.5">
-              <span className="font-serif text-xl md:text-2xl font-medium text-dark">
-                {stat.value !== null ? (
-                  <Counter to={stat.value} suffix={stat.suffix} />
-                ) : (
-                  stat.text
-                )}
-              </span>
-              <span className="font-sans text-xs text-dark/35 uppercase tracking-widest">
-                {stat.label}
-              </span>
-            </div>
-          ))}
+          <span className="font-sans text-[10px] tracking-[0.28em] uppercase text-cream/25">Desliza</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-px h-10 bg-gradient-to-b from-accent/50 to-transparent"
+          />
         </motion.div>
 
         {/* Scroll indicator — points UP (content is above in inverted layout) */}
@@ -193,6 +261,29 @@ export default function Hero() {
           </span>
         </motion.div>
       </div>
+
+      {/* Stats bar */}
+      <motion.div
+        custom={3.0}
+        variants={fadeUp}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 border-t border-cream/[0.06] px-6 md:px-16 lg:px-24 py-6 flex flex-wrap gap-8 md:gap-16 items-center"
+      >
+        {[
+          { val: 'Chile', label: 'Base' },
+          { val: 'Dinamarca', label: 'Internacional' },
+          { val: null, label: 'Proyectos', counter: { to: 200, suffix: '+' } },
+          { val: 'Brand Ensuring™', label: 'Metodología' },
+        ].map(({ val, label, counter }) => (
+          <div key={label}>
+            <div className="font-serif text-lg text-cream font-light">
+              {counter ? <Counter to={counter.to} suffix={counter.suffix} /> : val}
+            </div>
+            <div className="font-sans text-[9px] tracking-[0.2em] uppercase text-cream/25 mt-0.5">{label}</div>
+          </div>
+        ))}
+      </motion.div>
     </section>
   )
 }
