@@ -6,15 +6,15 @@ import Image from 'next/image'
 
 export default function Nav() {
   const { scrollY } = useScroll()
-  const bg = useMotionValue('rgba(7,5,15,0)')
+  const bg = useMotionValue('rgba(9,7,10,0)')
   const blur = useMotionValue('blur(0px)')
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (latest > 60) {
-      bg.set('rgba(7,5,15,0.85)')
+      bg.set('rgba(9,7,10,0.88)')
       blur.set('blur(20px)')
     } else {
-      bg.set('rgba(7,5,15,0)')
+      bg.set('rgba(9,7,10,0)')
       blur.set('blur(0px)')
     }
   })
@@ -28,7 +28,7 @@ export default function Nav() {
         backgroundColor: bg,
         backdropFilter: blur,
         WebkitBackdropFilter: blur,
-        borderBottom: '1px solid rgba(139,92,246,0.08)',
+        borderBottom: '1px solid rgba(200,124,58,0.08)',
       }}
     >
       <a href="#" className="flex items-center gap-3 group" data-cursor="hover">

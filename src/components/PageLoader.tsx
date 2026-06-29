@@ -24,7 +24,7 @@ export default function PageLoader() {
           <div className="absolute inset-0 overflow-hidden">
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-              style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)' }}
+              style={{ background: 'radial-gradient(circle, rgba(200,124,58,0.12) 0%, transparent 70%)' }}
             />
           </div>
 
