@@ -2,11 +2,13 @@
 import { motion } from 'framer-motion'
 
 const steps = [
-  { num: '01', title: 'Escuchar', desc: 'Entiendo tu marca y a quién quieres llegar.' },
-  { num: '02', title: 'Diseñar', desc: 'Doy forma a una experiencia que se siente tuya.' },
-  { num: '03', title: 'Construir', desc: 'Lo armo rápido, limpio y listo para crecer.' },
-  { num: '04', title: 'Lanzar', desc: 'Sale al mundo. Y la gente lo nota.' },
+  { num: '01', title: 'Escuchar', desc: 'Trazo el mapa de tu marca. Destino claro antes de despegar.' },
+  { num: '02', title: 'Diseñar', desc: 'Elijo la ruta. Cada decisión visual tiene un por qué.' },
+  { num: '03', title: 'Construir', desc: 'Despegue. Lo armo rápido, limpio, sin escalas.' },
+  { num: '04', title: 'Aterrizar', desc: 'Llegamos. Tu presencia aterriza y la gente lo siente.' },
 ]
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 export default function Process() {
   return (
@@ -16,7 +18,7 @@ export default function Process() {
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
           className="mb-16"
         >
           <p className="font-sans text-[10px] text-accent/50 uppercase tracking-[0.28em] mb-3">
@@ -24,7 +26,7 @@ export default function Process() {
           </p>
 
           <h2 className="font-serif text-[clamp(2.2rem,4.5vw,3.5rem)] font-light leading-tight text-cream">
-            Simple. Rápido. <em className="text-accent italic">Tuyo.</em>
+            Simple. Rápido. <em className="text-accent italic">Sin escalas.</em>
           </h2>
         </motion.div>
 
@@ -35,12 +37,17 @@ export default function Process() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+              transition={{ duration: 0.7, ease: EASE, delay: i * 0.1 }}
+              whileHover={{ x: 4 }}
               className="group"
             >
-              <div className="w-10 h-10 rounded-full border border-cream/15 flex items-center justify-center mb-5 group-hover:border-accent/40 transition-colors duration-300">
-                <span className="font-sans text-[11px] text-cream/30 tracking-[0.1em]">{step.num}</span>
+              {/* Gate indicator */}
+              <div className="w-14 h-7 border border-cream/[0.10] flex items-center justify-center mb-5 group-hover:border-accent/40 transition-all duration-300">
+                <span className="font-sans text-[9px] tracking-[0.12em] text-cream/25 group-hover:text-accent/60 transition-colors duration-300">
+                  GATE {step.num}
+                </span>
               </div>
+
               <h3 className="font-serif text-2xl text-cream font-light mb-3 group-hover:text-accent transition-colors duration-300">
                 {step.title}
               </h3>
@@ -49,12 +56,12 @@ export default function Process() {
           ))}
         </div>
 
-        {/* Horizontal rule */}
+        {/* Runway line */}
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+          transition={{ duration: 1.2, ease: EASE, delay: 0.4 }}
           className="h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent mt-20 origin-left"
         />
       </div>

@@ -1,8 +1,8 @@
 'use client'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useMagneticEffect } from '@/hooks/useMagneticEffect'
+import SkyAtmosphere from './SkyAtmosphere'
 
 function Counter({ from = 0, to, suffix = '' }: { from?: number; to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -45,13 +45,37 @@ const fadeUp = {
 }
 
 export default function Hero() {
+  const heroRef = useRef<HTMLElement>(null)
   const { ref: primaryRef, x: px, y: py } = useMagneticEffect(0.4)
   const { ref: secondaryRef, x: sx, y: sy } = useMagneticEffect(0.3)
 
-  return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-dark">
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const altDisplay = useTransform(scrollYProgress, [0, 1], [35000, 0])
+  const [altValue, setAltValue] = useState(35000)
+  useEffect(() => altDisplay.on('change', v => setAltValue(Math.round(v / 100) * 100)), [altDisplay])
 
-      {/* Vertical text — right edge, SSTIL-inspired */}
+  return (
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{ backgroundColor: '#030810' }}
+    >
+      <SkyAtmosphere heroRef={heroRef as React.RefObject<HTMLElement>} />
+
+      {/* Altitude indicator — left edge */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3.2, duration: 1.0 }}
+        className="absolute left-4 md:left-6 top-1/2 z-10 hidden md:flex items-center"
+        style={{ writingMode: 'vertical-rl', transform: 'translateY(-50%) rotate(180deg)' }}
+      >
+        <span className="font-sans text-[8px] tracking-[0.3em] uppercase text-cream/[0.14]">
+          FL{String(Math.round(altValue / 100)).padStart(3, '0')} · {altValue.toLocaleString()} FT
+        </span>
+      </motion.div>
+
+      {/* Vertical text — right edge */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -77,7 +101,7 @@ export default function Hero() {
         >
           <span className="w-6 h-px bg-accent flex-shrink-0" />
           <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-cream/35">
-            Creative Studio · Chile
+            Creative Studio · Chile → El Mundo
           </span>
         </motion.div>
 
@@ -96,46 +120,22 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* CAIDERON + NC cube */}
-        <div className="flex items-end gap-4 md:gap-6">
-          <motion.div
-            variants={clipReveal}
-            custom={1.85}
-            initial="hidden"
-            animate="visible"
-            className="flex-1 min-w-0"
+        {/* CAIDERON */}
+        <motion.div
+          variants={clipReveal}
+          custom={1.85}
+          initial="hidden"
+          animate="visible"
+        >
+          <h1
+            className="font-serif italic font-light leading-[0.82] tracking-[-0.03em] select-none"
+            style={{ fontSize: 'clamp(76px, 14vw, 200px)' }}
           >
-            <h1
-              className="font-serif italic font-light leading-[0.82] tracking-[-0.03em] select-none"
-              style={{ fontSize: 'clamp(76px, 14vw, 200px)' }}
-            >
-              <span className="text-cream">C</span>
-              <span className="text-accent">AI</span>
-              <span className="text-cream">DERÓN</span>
-            </h1>
-          </motion.div>
-
-          {/* NC cube — aligned to baseline */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 2.4, duration: 1.0, ease: EASE }}
-            className="relative flex-shrink-0 mb-1 md:mb-2"
-            style={{
-              width: 'clamp(52px, 8vw, 130px)',
-              aspectRatio: '1',
-              mixBlendMode: 'screen',
-            }}
-          >
-            <Image
-              src="/logo-nc.png"
-              alt="negrocAIderon"
-              fill
-              className="object-contain"
-              priority
-            />
-          </motion.div>
-        </div>
+            <span className="text-cream">C</span>
+            <span className="text-accent">AI</span>
+            <span className="text-cream">DERÓN</span>
+          </h1>
+        </motion.div>
 
         {/* Subtitle + CTAs */}
         <motion.div
@@ -190,8 +190,8 @@ export default function Hero() {
         className="relative z-10 border-t border-cream/[0.06] px-6 md:px-16 lg:px-24 py-5 flex flex-wrap gap-8 md:gap-16 items-center"
       >
         {[
-          { val: 'Chile', label: 'Base' },
-          { val: 'Dinamarca', label: 'Internacional' },
+          { val: 'SCL → CPH', label: 'Ruta' },
+          { val: null, label: 'Países', counter: { to: 20, suffix: '+' } },
           { val: null, label: 'Proyectos', counter: { to: 200, suffix: '+' } },
           { val: 'Brand Ensuring™', label: 'Metodología' },
         ].map(({ val, label, counter }) => (

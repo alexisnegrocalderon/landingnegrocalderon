@@ -15,25 +15,41 @@ export default function Cursor() {
   const ringY = useSpring(cursorY, { damping: 25, stiffness: 700 })
 
   useEffect(() => {
+    const isCoarse = () => window.matchMedia('(pointer: coarse)').matches
+
     const move = (e: MouseEvent) => {
+      if (isCoarse()) return
       cursorX.set(e.clientX)
       cursorY.set(e.clientY)
       if (!visible) setVisible(true)
     }
     const enter = (e: MouseEvent) => {
+      if (isCoarse()) return
       const el = e.target as HTMLElement
       if (el.closest('[data-cursor="view"]')) setState('view')
       else if (el.closest('a, button, [data-cursor="hover"]')) setState('hover')
       else setState('default')
     }
     const leave = () => setState('default')
+
+    const onTouchEnd = () => {
+      setVisible(false)
+      cursorX.set(-100)
+      cursorY.set(-100)
+    }
+
     window.addEventListener('mousemove', move)
     document.addEventListener('mouseover', enter)
     document.addEventListener('mouseout', leave)
+    window.addEventListener('touchend', onTouchEnd)
+    window.addEventListener('touchcancel', onTouchEnd)
+
     return () => {
       window.removeEventListener('mousemove', move)
       document.removeEventListener('mouseover', enter)
       document.removeEventListener('mouseout', leave)
+      window.removeEventListener('touchend', onTouchEnd)
+      window.removeEventListener('touchcancel', onTouchEnd)
     }
   }, [cursorX, cursorY, visible])
 
@@ -53,6 +69,7 @@ export default function Cursor() {
           height: state === 'view' ? 80 : state === 'hover' ? 44 : 28,
           backgroundColor: state === 'hover' ? 'rgba(192,57,43,0.12)' : state === 'view' ? 'rgba(192,57,43,0.08)' : 'transparent',
           borderColor: state === 'default' ? 'rgba(242,237,230,0.3)' : '#C0392B',
+          rotate: state === 'view' ? 360 : 0,
         }}
         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
       >

@@ -33,16 +33,26 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans text-sm text-cream/35 max-w-sm mx-auto leading-relaxed mb-12"
+          className="font-sans text-sm text-cream/35 max-w-sm mx-auto leading-relaxed mb-3"
         >
-          Cuéntame tu idea y te respondo con una propuesta clara.
+          Has llegado al destino correcto. Cuéntame tu proyecto.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="font-sans text-[8px] tracking-[0.3em] uppercase text-cream/[0.12] mb-12"
+        >
+          SCL 33°27&#39;S · DESTINO: TU MARCA
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <motion.a
             ref={ref as React.RefObject<HTMLAnchorElement>}
@@ -51,10 +61,16 @@ export default function CTASection() {
             rel="noopener noreferrer"
             data-cursor="hover"
             style={{ x, y }}
-            className="inline-flex items-center gap-3 bg-accent text-cream font-sans text-sm font-medium tracking-[0.06em] px-10 py-4 rounded-full hover:bg-accent-light transition-colors duration-300"
+            className="group relative inline-flex items-center gap-3 bg-accent text-cream font-sans text-sm font-medium tracking-[0.06em] px-10 py-4 overflow-hidden"
           >
-            Cotizar ahora
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <span className="relative z-10">Cotizar ahora</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <motion.span
+              className="absolute inset-0 bg-accent-light"
+              initial={{ x: '-100%' }}
+              whileHover={{ x: '0%' }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            />
           </motion.a>
         </motion.div>
 

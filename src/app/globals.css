@@ -42,6 +42,18 @@ body::before {
 /* Section fade-in (kept for compatibility) */
 
 /* Section fade-in */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.75; }
+}
+
+@keyframes sunBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
 @layer utilities {
   .text-balance { text-wrap: balance; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 }
