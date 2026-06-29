@@ -1,6 +1,5 @@
 'use client'
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const links = {
   Servicios: ['Logo', 'Sitio Express', 'WOW Effect', 'Premium', 'Agente IA'],
@@ -9,22 +8,8 @@ const links = {
 }
 
 export default function Footer() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'start 0.75'],
-  })
-
-  const clipPath = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ['inset(100% 0% 0% 0%)', 'inset(0% 0% 0% 0%)']
-  )
-
   return (
-    <motion.footer
-      ref={ref}
-      style={{ clipPath }}
+    <footer
       id="contacto"
       className="bg-dark text-cream pt-20 pb-10 px-6 md:px-12"
     >
@@ -33,9 +18,15 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-16 mb-20">
           {/* Brand */}
           <div className="max-w-xs">
-            <h2 className="font-serif text-4xl md:text-5xl font-light leading-tight mb-6">
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-serif text-4xl md:text-5xl font-light leading-tight mb-6"
+            >
               Negro<span className="text-red">c</span>Alderon
-            </h2>
+            </motion.h2>
             <p className="font-sans text-cream/40 text-sm leading-relaxed">
               No potencio marcas. Potencio personas. Presencia digital con alma para marcas con identidad.
             </p>
@@ -85,6 +76,6 @@ export default function Footer() {
           </p>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   )
 }
